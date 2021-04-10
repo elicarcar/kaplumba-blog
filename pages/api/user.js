@@ -23,11 +23,14 @@ async function handleGetUsers(req, res) {
     }
 
     const users = await User.find({ _id: { $ne: userId } })
+      .populate({ path: 'articles', model: 'Article' })
+      .populate({ path: 'readingLists', model: 'Article' })
       .select('-password')
       .sort({ username: 'asc' });
 
     return res.status(200).json(users);
   } catch (error) {
+    console.log(error);
     res.status(500).send('Internal server error.');
   }
 }

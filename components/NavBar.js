@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import { Menu, Segment, Icon } from 'semantic-ui-react';
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 import Link from 'next/link';
+import NProgress from 'nprogress';
+
+Router.onRouteChangeStart = () => NProgress.start();
+Router.onRouteChangeComplete = () => NProgress.done();
+Router.onRouteChangeError = () => NProgress.done();
 
 function NavBar() {
   function handleItemClick() {
@@ -12,14 +17,10 @@ function NavBar() {
   const [activeItem, setActiveItem] = useState('');
 
   return (
-    <Segment inverted>
+    <Segment className="nav_wrapper" inverted>
       <Menu borderless inverted pointing secondary stackable>
         <Link href="/">
-          <Menu.Item
-            name="Anasayfa"
-            active={router.asPath === '/'}
-            onClick={handleItemClick}
-          >
+          <Menu.Item active={router.asPath === '/'} onClick={handleItemClick}>
             <Icon name="qq" />
             Anasayfa
           </Menu.Item>
@@ -27,7 +28,6 @@ function NavBar() {
 
         <Link href="/profilim">
           <Menu.Item
-            name="Profilim"
             active={router.asPath === '/profilim'}
             onClick={handleItemClick}
           >
@@ -37,10 +37,20 @@ function NavBar() {
         </Link>
         <Link href="/">
           <Menu.Item
-            name="friends"
             active={router.asPath === '/friends'}
             onClick={handleItemClick}
           />
+        </Link>
+      </Menu>
+      <Menu inverted borderless inverted pointing secondary stackable>
+        <Link href="/kaydol">
+          <Menu.Item
+            active={router.asPath === '/kaydol'}
+            onClick={handleItemClick}
+          >
+            <Icon name="sign-in" />
+            Kaydol
+          </Menu.Item>
         </Link>
       </Menu>
     </Segment>

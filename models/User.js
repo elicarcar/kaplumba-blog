@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import Article from './Article';
 
 const { String, ObjectId } = mongoose.Schema.Types;
 
