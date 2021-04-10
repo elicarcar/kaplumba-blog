@@ -15,5 +15,5 @@ const CommentSchema = mongoose.Schema({
   created_at: DateTime,
 });
 
-export default mongoose.models.CommentSchema ||
+export default mongoose.models.Comment ||
   mongoose.model('Comment', CommentSchema);

@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import User from '../../models/User';
 import connectDb from '../../utils/db';
+import authMiddleware from '../../utils/auth';
 
 connectDb();
 
@@ -16,12 +17,7 @@ export default function handler(req, res) {
 
 async function handleGetUsers(req, res) {
   try {
-    const { authorization } = req.headers;
-    if (!authorization) {
-      res.status(401).send('Izin yok.');
-    }
-    const { userId } = await jwt.verify(authorization, process.env.JWT_SECRET);
-
+    const userId = await authMiddleware(req, res);
     if (!userId) {
       return res.status(401).send('Yanlis token');
     }
@@ -38,16 +34,9 @@ async function handleGetUsers(req, res) {
 
 async function handleUpdateUser(req, res) {
   try {
-    const { authorization } = req.headers;
-
     const { username } = req.body;
 
-    if (!authorization) {
-      return res.status(401).send('Izin yok');
-    }
-
-    const { userId } = await jwt.verify(authorization, process.env.JWT_SECRET);
-
+    const userId = await authMiddleware(req, res);
     if (userId) {
       const userUpdate = await User.findOneAndUpdate(
         { _id: userId },
@@ -67,16 +56,7 @@ async function handleUpdateUser(req, res) {
 
 async function handleDeleteUser(req, res) {
   try {
-    const { authorization } = req.headers;
-    if (!authorization) {
-      res
-        .status(401)
-        .send(
-          'Bu kullaniciyi silmeye yetkiniz yok. Lutfen yeniden giris yapin'
-        );
-    }
-
-    const { userId } = await jwt.verify(authorization, process.env.JWT_SECRET);
+    const userId = await authMiddleware(req, res);
 
     if (userId) {
       await User.findOneAndDelete({ _id: userId });
