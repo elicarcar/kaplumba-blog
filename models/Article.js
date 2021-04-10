@@ -1,21 +1,21 @@
 import mongoose from 'mongoose';
 import User from './User';
 
-const { String, ObjectId } = mongoose.Schema.Types;
+const { String, ObjectId, Date } = mongoose.Schema.Types;
 
 const ArticleSchema = new mongoose.Schema({
   author: {
     type: ObjectId,
-    ref: User,
+    ref: 'User',
   },
   content: {
     type: String,
     required: true,
   },
   created_at: {
-    type: DateTime,
+    type: Date,
+    default: Date.now,
   },
 });
 
-export default mongoose.models.ArticleSchema ||
-  mongoose.model('Article', ArticleSchema);
+export default mongoose.models.ArticleSchema;

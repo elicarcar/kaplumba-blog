@@ -3,8 +3,8 @@ import Article from './Article';
 
 const { String, ObjectId } = mongoose.Schema.Types;
 
-const UserSchema = new Schema({
-  name: {
+const UserSchema = new mongoose.Schema({
+  username: {
     type: String,
     required: true,
   },
@@ -17,7 +17,13 @@ const UserSchema = new Schema({
     required: true,
     select: false,
   },
-  readList: [Article],
+  readLists: [
+    {
+      type: ObjectId,
+      ref: 'Article',
+    },
+  ],
+  articles: [{ type: ObjectId, ref: 'Article' }],
 });
 
 export default mongoose.models.User || mongoose.model('User', UserSchema);
