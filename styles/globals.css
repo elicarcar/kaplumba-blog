@@ -19,6 +19,10 @@ a {
   justify-content: space-between;
 }
 
+.radius-none {
+  border-radius: 0 !important;
+}
+
 .d-flex {
   display: flex;
 }
@@ -33,4 +37,8 @@ a {
 
 .align-center {
   align-items: center;
+}
+
+.align-baseline {
+  align-items: baseline;
 }

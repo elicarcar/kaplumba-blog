@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import User from '../../models/User';
+import Article from '../../models/Article';
 import connectDb from '../../utils/db';
 import authMiddleware from '../../utils/auth';
 
@@ -7,7 +8,7 @@ connectDb();
 
 export default function handler(req, res) {
   if (req.method === 'GET') {
-    return handleGetUsers(req, res);
+    return handleGetUser(req, res);
   } else if (req.method === 'PUT') {
     return handleUpdateUser(req, res);
   } else if (req.method === 'DELETE') {
@@ -15,20 +16,20 @@ export default function handler(req, res) {
   }
 }
 
-async function handleGetUsers(req, res) {
+async function handleGetUser(req, res) {
   try {
-    const userId = await authMiddleware(req, res);
-    if (!userId) {
-      return res.status(401).send('Yanlis token');
-    }
+    const _id = await authMiddleware(req, res);
 
-    const users = await User.find({ _id: { $ne: userId } })
+    const user = await User.findOne({ _id })
       .populate({ path: 'articles', model: 'Article' })
       .populate({ path: 'readingLists', model: 'Article' })
-      .select('-password')
-      .sort({ username: 'asc' });
+      .select('-password');
 
-    return res.status(200).json(users);
+    if (!user) {
+      return res.status(404).send('No such user');
+    }
+
+    return res.status(200).json(user);
   } catch (error) {
     console.log(error);
     res.status(500).send('Internal server error.');
