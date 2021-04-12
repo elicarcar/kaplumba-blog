@@ -16,18 +16,22 @@ function MyApp({ Component, pageProps }) {
   );
 }
 
-MyApp.getInitialProps = async (ctx) => {
-  let pageProps = {};
+MyApp.getInitialProps = async ({ ctx, Component }) => {
   const { token } = parseCookies(ctx);
+  let pageProps = {};
 
-  if (!token) {
-    const notProtectedRoute =
-      ctx.pathname !== '/kaydol' || ctx.pathname !== '/login';
+  const notProtectedRoute =
+    ctx.pathname == '/kaydol' || ctx.pathname == '/login';
 
-    if (notProtectedRoute) {
-      redirectUser(ctx, '/kaydol');
-    }
+  if (Component.getInitialProps) {
+    pageProps = await Component.getInitialProps(ctx);
   }
+
+  if (!notProtectedRoute && !token) {
+    redirectUser(ctx, '/login');
+  }
+
+  console.log('fired ');
 
   try {
     const payload = {
@@ -37,7 +41,6 @@ MyApp.getInitialProps = async (ctx) => {
     const user = await res.data;
     pageProps.user = user;
   } catch (error) {
-    console.error('Error getting current user', error);
     //Throw out invalid token
     destroyCookie(ctx, 'token');
   }

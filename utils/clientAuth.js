@@ -15,6 +15,6 @@ export function redirectUser(ctx, location) {
 
 export const destroyCookie = (ctx, token) => {
   Cookies.remove(token);
-  ctx.res.writeHead(302, { Location: '/login' });
-  ctx.res.end();
+  // ctx.res.writeHead(302, { Location: '/login' });
+  // ctx.res.end();
 };

@@ -24,7 +24,7 @@ a {
 }
 
 .d-flex {
-  display: flex;
+  display: flex !important;
 }
 
 .flex-column {
@@ -41,4 +41,13 @@ a {
 
 .align-baseline {
   align-items: baseline;
+}
+
+.container {
+  margin: 50px auto;
+  max-width: 900px;
+}
+
+.pointer {
+  cursor: pointer;
 }

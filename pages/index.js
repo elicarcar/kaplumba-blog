@@ -1,7 +1,11 @@
+import React, { useEffect } from 'react';
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
+import baseUrl from '../utils/baseUrl';
+import { parseCookies } from 'nookies';
+import axios from 'axios';
 
-export default function Home() {
+function Home({ articles }) {
   return (
     <div className={styles.container}>
       <Head>
@@ -63,3 +67,15 @@ export default function Home() {
     </div>
   );
 }
+
+Home.getInitialProps = async (ctx) => {
+  const { token } = parseCookies(ctx);
+
+  const res = await axios.get(`${baseUrl}/api/articles`, {
+    headers: { Authorization: token },
+  });
+
+  return { articles: res.data };
+};
+
+export default Home;

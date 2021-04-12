@@ -10,6 +10,8 @@ export default async (req, res) => {
 
     const user = await User.findOne({ email }).select('+password');
 
+    console.log(user);
+
     if (!user) {
       return res
         .status(404)
@@ -20,7 +22,7 @@ export default async (req, res) => {
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (passwordMatch) {
-      const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+      const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
         expiresIn: '1d',
       });
       res.status(200).json(token);

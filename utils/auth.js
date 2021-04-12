@@ -9,9 +9,9 @@ export default async function authMiddleware(req, res) {
         .send('Izin yok. Lutfen yeniden giris yapmayi deneyin.');
     }
     const decode = await jwt.verify(authorization, process.env.JWT_SECRET);
-
+    console.log(decode);
     if (decode) {
-      return decode.newUser._id;
+      return decode._id || decode.newUser._id;
     }
   } catch (error) {
     return res.status(401).send('Izin yokkk');

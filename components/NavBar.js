@@ -27,24 +27,34 @@ function NavBar({ user }) {
         </Link>
       </Menu>
       <Menu inverted borderless pointing secondary stackable>
-        <Link href="/profilim">
-          <Menu.Item
-            active={router.asPath === '/profilim'}
-            onClick={handleItemClick}
-          >
-            <Icon name="user" />
-            Profilim
-          </Menu.Item>
-        </Link>
-        <Link href="/kaydol">
-          <Menu.Item
-            active={router.asPath === '/kaydol'}
-            onClick={handleItemClick}
-          >
+        {user && (
+          <Link href="/profilim">
+            <Menu.Item
+              active={router.asPath === '/profilim'}
+              onClick={handleItemClick}
+            >
+              <Icon name="user" />
+              Profilim
+            </Menu.Item>
+          </Link>
+        )}
+
+        {!user ? (
+          <Link href="/login">
+            <Menu.Item
+              active={router.asPath === '/login'}
+              onClick={handleItemClick}
+            >
+              Giris
+              <Icon name="sign-in" />
+            </Menu.Item>
+          </Link>
+        ) : (
+          <Menu.Item onClick={handleItemClick}>
             <Icon name="sign-in" />
-            {!user ? 'Kaydol' : 'Cikis yap'}
+            Cikis
           </Menu.Item>
-        </Link>
+        )}
       </Menu>
     </Segment>
   );

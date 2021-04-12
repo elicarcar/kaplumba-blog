@@ -1,7 +1,16 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import baseUrl from '../utils/baseUrl';
-import { Form, Input, Button, Icon, Header, Message } from 'semantic-ui-react';
+import {
+  Form,
+  Input,
+  Button,
+  Icon,
+  Header,
+  Message,
+  Grid,
+  Segment,
+} from 'semantic-ui-react';
 import { setCookie } from '../utils/clientAuth';
 
 const Kaydol = () => {
@@ -61,10 +70,6 @@ const Kaydol = () => {
 
   return (
     <>
-      <Header as="h2" block>
-        <Icon name="add" color="green" />
-        Hemen Kaydolun!
-      </Header>
       {error ||
         (success && (
           <Message
@@ -74,66 +79,78 @@ const Kaydol = () => {
             content={contentMessage}
           />
         ))}
-
-      <Form
-        loading={loading}
-        onSubmit={(e) => handleForm(e)}
-        className="form d-flex flex-column align-center"
-        error={true}
-        size="large"
+      <Grid
+        textAlign="center"
+        style={{ height: '100vh' }}
+        verticalAlign="middle"
       >
-        <Input
-          name="username"
-          iconPosition="left"
-          onChange={(e) => handleChange(e)}
-          placeholder="Bir kullanici adi girin"
-        >
-          <input />
-          <Icon name="user" />
-        </Input>
-        <Input
-          name="email"
-          iconPosition="left"
-          onChange={(e) => handleChange(e)}
-          placeholder="Emailinizi girin"
-        >
-          <input />
-          <Icon name="at" />
-        </Input>
-        <Input
-          name="password"
-          onChange={(e) => handleChange(e)}
-          type="password"
-          iconPosition="left"
-          placeholder="Sifreniz"
-        >
-          <input />
-          <Icon name="user secret" />
-        </Input>
-        <Input
-          name="password2"
-          onChange={(e) => handleChange(e)}
-          type="password"
-          iconPosition="left"
-          placeholder="Sifrenizi bir daha girin"
-        >
-          <input />
-          <Icon name="user secret" />
-        </Input>
+        <Grid.Column style={{ maxWidth: 450 }}>
+          <Header as="h2">
+            <Icon name="add" color="green" />
+            Hemen Kaydolun!
+          </Header>
+          <Form
+            loading={loading}
+            onSubmit={(e) => handleForm(e)}
+            error={true}
+            size="large"
+          >
+            <Segment stacked>
+              <Form.Input
+                name="username"
+                iconPosition="left"
+                onChange={(e) => handleChange(e)}
+                placeholder="Bir kullanici adi girin"
+              >
+                <input />
+                <Icon name="user" />
+              </Form.Input>
+              <Form.Input
+                name="email"
+                iconPosition="left"
+                onChange={(e) => handleChange(e)}
+                placeholder="Emailinizi girin"
+              >
+                <input />
+                <Icon name="at" />
+              </Form.Input>
+              <Form.Input
+                name="password"
+                onChange={(e) => handleChange(e)}
+                type="password"
+                iconPosition="left"
+                placeholder="Sifreniz"
+              >
+                <input />
+                <Icon name="user secret" />
+              </Form.Input>
+              <Form.Input
+                name="password2"
+                onChange={(e) => handleChange(e)}
+                type="password"
+                iconPosition="left"
+                placeholder="Sifrenizi bir daha girin"
+              >
+                <input />
+                <Icon name="user secret" />
+              </Form.Input>
+            </Segment>
 
-        <br />
-        <br />
+            <br />
+            <br />
 
-        <Form.Field
-          control={Button}
-          disabled={disabled || loading}
-          inverted
-          color="green"
-          content="Kaydol"
-          icon="pencil alternate"
-          type="submit"
-        />
-      </Form>
+            <Form.Field
+              control={Button}
+              disabled={disabled || loading}
+              inverted
+              color="teal"
+              content="Kaydol"
+              icon="pencil alternate"
+              type="submit"
+            />
+          </Form>
+        </Grid.Column>
+      </Grid>
     </>
   );
 };
