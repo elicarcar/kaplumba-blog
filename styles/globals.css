@@ -35,6 +35,10 @@ a {
   justify-content: center;
 }
 
+.justify-between {
+  justify-content: space-between;
+}
+
 .align-center {
   align-items: center;
 }
@@ -50,4 +54,23 @@ a {
 
 .pointer {
   cursor: pointer;
+}
+
+.h-50 {
+  height: 50vh;
+}
+
+.article {
+  padding: 10px;
+  background: #f2eecb61 !important;
+  transition: top 0.5s ease-in;
+  position: relative;
+}
+
+.article:hover {
+  top: -1px;
+}
+
+.bookmark:hover {
+  color: teal;
 }

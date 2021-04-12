@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { EditorState, RichUtils } from 'draft-js';
-import { convertToHTML, convertFromHTML } from 'draft-convert';
+import { EditorState } from 'draft-js';
+import { convertToHTML } from 'draft-convert';
 import { Container, Button, Input, Header, Message } from 'semantic-ui-react';
 import axios from 'axios';
 import baseUrl from '../../utils/baseUrl';
@@ -62,11 +62,12 @@ const Makale = () => {
         }
       );
       setSucess(true);
-      console.log('hello after success');
     } catch (error) {
       console.log(error);
     } finally {
       setLoading(false);
+      setHeader('');
+      setEditor(EditorState.createEmpty());
     }
   };
 
