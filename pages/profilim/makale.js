@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { EditorState, RichUtils, Button } from 'draft-js';
-import { Container } from 'semantic-ui-react';
+import { EditorState, RichUtils } from 'draft-js';
+import { convertToHTML, convertFromHTML } from 'draft-convert';
+import { Container, Button, Input, Header, Message } from 'semantic-ui-react';
+import axios from 'axios';
+import baseUrl from '../../utils/baseUrl';
+import Cookie from 'js-cookie';
 
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import dynamic from 'next/dynamic';
@@ -11,43 +15,99 @@ const Editor = dynamic(
 
 const Makale = () => {
   const [editor, setEditor] = useState(() => EditorState.createEmpty());
-  const contentState = editor.getCurrentContent();
-  function handleKeyCommand(command, editorState) {
-    const newState = RichUtils.handleKeyCommand(editorState, command);
+  const [contentState, setContentState] = useState();
+  const [headerContent, setHeader] = useState('');
+  const [success, setSucess] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-    if (newState) {
-      setEditor(newState);
-      return 'handled';
-    }
-
-    return 'not-handled';
-  }
+  const exportHTML = () => {
+    setContentState(convertToHTML(editor.getCurrentContent()));
+  };
 
   useEffect(() => {
-    console.log(editor);
-    console.log(contentState);
+    exportHTML();
   }, [editor]);
 
+  function onHeaderChange(e) {
+    setHeader(e.target.value);
+  }
+
+  const publishDocs = async () => {
+    if (!headerContent.length || !contentState.length) {
+      return;
+    }
+
+    const token = await Cookie.get('token');
+    if (!token) {
+      return;
+    }
+
+    try {
+      setLoading(true);
+      await exportHTML();
+      const payload = {
+        header: headerContent,
+        content: contentState,
+      };
+
+      await axios.post(
+        `${baseUrl}/api/article`,
+        {
+          ...payload,
+        },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      setSucess(true);
+      console.log('hello after success');
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <Container>
-      <Editor
-        editorState={editor}
-        onEditorStateChange={setEditor}
-        placeholder="Tell a story..."
-        spellCheck={true}
-        handleKeyCommand={handleKeyCommand}
-        toolbarClassName="toolbarClassName"
-        wrapperClassName="wrapperClassName"
-        editorClassName="editorClassName"
-        toolbar={{
-          inline: { inDropdown: true },
-          list: { inDropdown: true },
-          textAlign: { inDropdown: true },
-          link: { inDropdown: true },
-          history: { inDropdown: true },
-        }}
-      />
-    </Container>
+    <>
+      <Container>
+        <Header as="h2">Makaleni Olustur</Header>
+        {success && (
+          <Message
+            success={success}
+            content="Makeleniz basarili bir sekilde yayinlandi"
+          />
+        )}
+
+        <Input
+          loading={loading}
+          name="Baslik"
+          onChange={(e) => onHeaderChange(e)}
+        />
+        <Editor
+          loading={loading}
+          editorState={editor}
+          onEditorStateChange={setEditor}
+          placeholder="Tell a story..."
+          spellCheck={true}
+          toolbarClassName="toolbarClassName"
+          wrapperClassName="wrapperClassName"
+          editorClassName="editorClassName"
+          toolbar={{
+            inline: { inDropdown: true },
+            list: { inDropdown: true },
+            textAlign: { inDropdown: true },
+            link: { inDropdown: true },
+            history: { inDropdown: true },
+          }}
+        />
+        <Button color="teal" type="button" onClick={() => publishDocs()}>
+          Yayinla
+        </Button>
+      </Container>
+    </>
   );
 };
 

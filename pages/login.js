@@ -17,11 +17,11 @@ import { setCookie } from '../utils/clientAuth';
 const Login = ({ user }) => {
   const router = useRouter();
 
-  //   useEffect(() => {
-  //     if (user) {
-  //       router.push('/');
-  //     }
-  //   });
+  useEffect(() => {
+    if (user) {
+      router.push('/');
+    }
+  });
 
   const INITIAL = {
     email: '',
@@ -47,7 +47,6 @@ const Login = ({ user }) => {
       const token = await axios.post(`${baseUrl}/api/login`, { ...formData });
       setCookie(token);
 
-      console.log(token.data);
       router.push('/profilim');
     } catch (error) {
       console.log(error);
