@@ -17,12 +17,6 @@ import { setCookie } from '../utils/clientAuth';
 const Login = ({ user }) => {
   const router = useRouter();
 
-  useEffect(() => {
-    if (user) {
-      router.push('/');
-    }
-  });
-
   const INITIAL = {
     email: '',
     password: '',
@@ -31,6 +25,29 @@ const Login = ({ user }) => {
   const [formData, setFormData] = useState(INITIAL);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [errorContent, setErrorContent] = useState('');
+
+  useEffect(() => {
+    if (user) {
+      router.push('/');
+    }
+  });
+
+  // useEffect(() => {
+  //   resetMessage();
+  //   console.log('cleaned');
+
+  //   return () => {
+  //     clearTimeout(resetMessage());
+  //   };
+  // }, [error]);
+
+  // function resetMessage() {
+  //   setTimeout(() => {
+  //     setError(false);
+  //     setErrorContent('');
+  //   }, 4000);
+  // }
 
   function handleChange(e) {
     setFormData((prevState) => ({
@@ -49,20 +66,23 @@ const Login = ({ user }) => {
 
       router.push('/profilim');
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data);
+      setError(true);
+      setErrorContent(error.response.data);
     } finally {
       setLoading(false);
+      e.target.reset();
     }
   }
   return (
     <div>
-      {error && <Message />}
       <Grid
         textAlign="center"
         style={{ height: '100vh' }}
         verticalAlign="middle"
       >
         <Grid.Column style={{ maxWidth: 450 }}>
+          {error && <Message color="red" content={errorContent} />}
           <Header as="h2" color="teal" textAlign="center">
             Hesabina giris yap
           </Header>

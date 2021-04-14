@@ -22,7 +22,7 @@ async function handleGetUser(req, res) {
 
     const user = await User.findOne({ _id })
       .populate({ path: 'articles', model: 'Article' })
-      .populate({ path: 'readingLists', model: 'Article' })
+      .populate({ path: 'readLists', model: 'Article' })
       .select('-password');
 
     if (!user) {

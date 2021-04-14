@@ -1,10 +1,8 @@
 import React, { useEffect } from 'react';
-import Head from 'next/head';
-import styles from '../styles/Home.module.css';
-import baseUrl from '../utils/baseUrl';
-import { parseCookies } from 'nookies';
-import { Container } from 'semantic-ui-react';
 import Yazi from '../components/Yazi';
+import { Container } from 'semantic-ui-react';
+import { parseCookies } from 'nookies';
+import baseUrl from '../utils/baseUrl';
 import axios from 'axios';
 import Link from 'next/link';
 
@@ -37,11 +35,15 @@ function Home({ articles, user }) {
 Home.getInitialProps = async (ctx) => {
   const { token } = parseCookies(ctx);
 
-  const res = await axios.get(`${baseUrl}/api/articles`, {
-    headers: { Authorization: token },
-  });
+  try {
+    const res = await axios.get(`${baseUrl}/api/articles`, {
+      headers: { Authorization: token },
+    });
 
-  return { articles: res.data };
+    return { articles: res.data };
+  } catch (error) {
+    console.log('bok');
+  }
 };
 
 export default Home;

@@ -37,7 +37,6 @@ export default function Profilim({ user }) {
                 name="plus"
                 color="teal"
                 size="large"
-                center
               />
               <Link href="profilim/makale">
                 <Button color="teal">Makale olustur</Button>

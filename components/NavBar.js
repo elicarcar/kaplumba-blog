@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, Segment, Icon } from 'semantic-ui-react';
 import Router, { useRouter } from 'next/router';
+import { destroyCookie } from 'nookies';
 import Link from 'next/link';
 import NProgress from 'nprogress';
 
@@ -9,12 +10,13 @@ Router.onRouteChangeComplete = () => NProgress.done();
 Router.onRouteChangeError = () => NProgress.done();
 
 function NavBar({ user }) {
-  function handleItemClick() {
-    console.log('hello');
-  }
-
   const router = useRouter();
   const [activeItem, setActiveItem] = useState('');
+
+  async function handleItemClick() {
+    await destroyCookie(null, 'token');
+    router.push('/login');
+  }
 
   return (
     <Segment className="nav_wrapper radius-none align-baseline" inverted>

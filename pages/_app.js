@@ -18,6 +18,9 @@ function MyApp({ Component, pageProps }) {
 
 MyApp.getInitialProps = async ({ ctx, Component }) => {
   const { token } = parseCookies(ctx);
+
+  console.log(token);
+
   let pageProps = {};
 
   const notProtectedRoute =
