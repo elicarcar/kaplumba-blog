@@ -33,21 +33,21 @@ const Login = ({ user }) => {
     }
   });
 
-  // useEffect(() => {
-  //   resetMessage();
-  //   console.log('cleaned');
+  useEffect(() => {
+    resetMessage();
+    console.log('cleaned');
 
-  //   return () => {
-  //     clearTimeout(resetMessage());
-  //   };
-  // }, [error]);
+    return () => {
+      clearTimeout(resetMessage());
+    };
+  }, [error]);
 
-  // function resetMessage() {
-  //   setTimeout(() => {
-  //     setError(false);
-  //     setErrorContent('');
-  //   }, 4000);
-  // }
+  function resetMessage() {
+    setTimeout(() => {
+      setError(false);
+      setErrorContent('');
+    }, 4000);
+  }
 
   function handleChange(e) {
     setFormData((prevState) => ({

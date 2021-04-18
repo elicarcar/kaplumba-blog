@@ -1,5 +1,6 @@
 import Article from '../../models/Article';
 import User from '../../models/User';
+import Comment from '../../models/Comment';
 import authMiddleware from '../../utils/auth';
 import connectDb from '../../utils/db';
 
@@ -21,7 +22,11 @@ async function handleGetRequest(req, res) {
   try {
     await authMiddleware(req, res);
     const { _id } = req.query;
-    const article = await Article.findOne({ _id });
+    console.log('hello', _id);
+    const article = await Article.findOne({ _id }).populate({
+      path: 'comments',
+      model: 'Comment',
+    });
     res.status(200).json(article);
   } catch (error) {
     res.status(500).send('Internal server error.');

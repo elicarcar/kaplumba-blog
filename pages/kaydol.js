@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import baseUrl from '../utils/baseUrl';
 import {
@@ -18,7 +18,7 @@ const Kaydol = () => {
   const [disabled, setDisabled] = useState(false);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [contentMessage, setContentMessage] = useState('');
+  const [errorContent, setErrorContent] = useState('');
 
   const INITIAL_DATA = {
     username: '',
@@ -28,6 +28,22 @@ const Kaydol = () => {
   };
 
   const [formData, setFormData] = useState(INITIAL_DATA);
+
+  useEffect(() => {
+    resetMessage();
+    console.log('cleaned');
+
+    return () => {
+      clearTimeout(resetMessage());
+    };
+  }, [error]);
+
+  function resetMessage() {
+    setTimeout(() => {
+      setError(false);
+      setErrorContent('');
+    }, 4000);
+  }
 
   function handleChange(e) {
     setFormData((prevState) => ({
@@ -44,47 +60,36 @@ const Kaydol = () => {
       const isMatch = formData.password === formData.password2;
       if (isEmpty) {
         setError(true);
-        setContentMessage('Lutfen tum alanlari doldurdugunuza emin olun.');
+        setErrorContent('Lutfen tum alanlari doldurdugunuza emin olun.');
       }
       if (!isMatch || formData.password < 5 || formData.password > 10) {
         setError(true);
-        setContentMessage('Lutfen bilgilerinizi kontrol edin');
+        setErrorContent('Lutfen bilgilerinizi kontrol edin');
       }
 
       const token = await axios.post(`${baseUrl}/api/signup`, { ...formData });
       setSuccess(true);
-      setContentMessage('Yasasin!');
+      setErrorContent('Yasasin!');
       setLoading(false);
       setCookie(token);
     } catch (error) {
       setError(true);
-      setContentMessage('Bir sorun olustu. Lutfen tekrar deneyin.');
+      setErrorContent(error.response.data);
     } finally {
       setFormData(INITIAL_DATA);
       setLoading(false);
-      if (error) {
-        setError(false);
-      }
     }
   }
 
   return (
     <>
-      {error ||
-        (success && (
-          <Message
-            success={success}
-            error={error}
-            header="Bir sorun olustu"
-            content={contentMessage}
-          />
-        ))}
       <Grid
         textAlign="center"
         style={{ height: '100vh' }}
         verticalAlign="middle"
       >
         <Grid.Column style={{ maxWidth: 450 }}>
+          {error && <Message error={error} content={errorContent} />}
           <Header as="h2">
             <Icon name="add" color="green" />
             Hemen Kaydolun!

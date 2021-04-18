@@ -6,7 +6,6 @@ import { parseCookies, destroyCookie } from 'nookies';
 import baseUrl from '../utils/baseUrl';
 import 'semantic-ui-css/semantic.min.css';
 import { redirectUser } from '../utils/clientAuth';
-import { useEffect } from 'react';
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -17,9 +16,7 @@ function MyApp({ Component, pageProps }) {
 }
 
 MyApp.getInitialProps = async ({ ctx, Component }) => {
-  const { token } = parseCookies(ctx);
-
-  console.log(token);
+  const { token } = await parseCookies(ctx);
 
   let pageProps = {};
 
@@ -33,8 +30,6 @@ MyApp.getInitialProps = async ({ ctx, Component }) => {
   if (!notProtectedRoute && !token) {
     redirectUser(ctx, '/login');
   }
-
-  console.log('fired ');
 
   try {
     const payload = {

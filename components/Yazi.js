@@ -5,12 +5,14 @@ import baseUrl from '../utils/baseUrl';
 import axios from 'axios';
 import Cookie from 'js-cookie';
 import moment from 'moment';
+import { useRouter } from 'next/router';
 
 const Yazi = ({ article, user }) => {
   const formattedDate = moment(article.created_at).format('MM/DD/YYYY');
   const shortContent = article.content.substring(0, 500) + '...';
   const [loading, setLoading] = useState(false);
   const [userList, setUserList] = useState(user.readLists);
+  const router = useRouter();
 
   function articleContent() {
     return { __html: shortContent };
@@ -58,7 +60,7 @@ const Yazi = ({ article, user }) => {
   }
 
   return (
-    <Link href="#">
+    <Link href={`/makale?_id=${article._id}`}>
       <Card className="article pointer" fluid>
         {!isUsers() && (
           <Card.Content extra>

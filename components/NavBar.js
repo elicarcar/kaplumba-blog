@@ -22,7 +22,7 @@ function NavBar({ user }) {
     <Segment className="nav_wrapper radius-none align-baseline" inverted>
       <Menu borderless inverted pointing secondary stackable>
         <Link href="/">
-          <Menu.Item active={router.asPath === '/'} onClick={handleItemClick}>
+          <Menu.Item active={router.asPath === '/'}>
             <Icon name="qq" />
             Kaplumba
           </Menu.Item>
@@ -31,10 +31,7 @@ function NavBar({ user }) {
       <Menu inverted borderless pointing secondary stackable>
         {user && (
           <Link href="/profilim">
-            <Menu.Item
-              active={router.asPath === '/profilim'}
-              onClick={handleItemClick}
-            >
+            <Menu.Item active={router.asPath === '/profilim'}>
               <Icon name="user" />
               Profilim
             </Menu.Item>
@@ -43,10 +40,7 @@ function NavBar({ user }) {
 
         {!user ? (
           <Link href="/login">
-            <Menu.Item
-              active={router.asPath === '/login'}
-              onClick={handleItemClick}
-            >
+            <Menu.Item active={router.asPath === '/login'}>
               Giris
               <Icon name="sign-in" />
             </Menu.Item>

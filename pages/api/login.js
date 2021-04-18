@@ -10,8 +10,6 @@ export default async (req, res) => {
 
     const user = await User.findOne({ email }).select('+password');
 
-    console.log(user);
-
     if (!user) {
       return res
         .status(404)
