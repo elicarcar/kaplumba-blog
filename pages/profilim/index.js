@@ -1,29 +1,33 @@
+import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import 'semantic-ui-css/semantic.min.css';
-import { Header, Container, Label, Button, Icon } from 'semantic-ui-react';
+import { Button, Container, Header, Icon, Label } from 'semantic-ui-react';
 import UserMenu from '../../components/dashboard/UserMenu';
 import UserMenuItem from '../../components/dashboard/UserMenuItem';
-import Link from 'next/link';
+import Yazi from '../../components/Yazi';
 
 export default function Profilim({ user }) {
-  const [activeTab, setActiveTab] = useState(null);
+  const [activeTab, setActiveTab] = useState(user.articles);
 
   function handleMenuItemClick(e, data) {
+    console.log(data.value);
     setActiveTab(data.value);
   }
+
+  useEffect(() => {
+    console.log(user);
+  });
 
   return (
     <>
       <Container className="d-flex container">
         <Container>
-          <Header as="h1">{`Hosgeldin ${user.username}`}</Header>
+          <Header as="h1">{`Hoşgeldin ${user.username}`}</Header>
+          <p className="secondary">
+            Burada okuma listeni ve makalelerini görebilir, isteğine göre
+            düzenleyebilirsin.
+          </p>
           <UserMenu>
-            <UserMenuItem
-              itemName="Okuma Listem"
-              iconName="bookmark"
-              itemValue={user.readLists}
-              handleMenuItemClick={(e, data) => handleMenuItemClick(e, data)}
-            />
             <UserMenuItem
               itemName="Makalelerim"
               itemValue={user.articles}
@@ -31,6 +35,12 @@ export default function Profilim({ user }) {
             >
               <Label color="teal">{user.articles.length}</Label>
             </UserMenuItem>
+            <UserMenuItem
+              itemName="Okuma Listem"
+              iconName="bookmark"
+              itemValue={user.readLists}
+              handleMenuItemClick={(e, data) => handleMenuItemClick(e, data)}
+            />
             <UserMenuItem>
               <Icon
                 className="d-flex align-center justify-center"
@@ -39,15 +49,22 @@ export default function Profilim({ user }) {
                 size="large"
               />
               <Link href="profilim/makale">
-                <Button color="teal">Makale olustur</Button>
+                <Button color="teal">Makale oluştur</Button>
               </Link>
             </UserMenuItem>
           </UserMenu>
         </Container>
+        <div className="line"></div>
         <Container text>
-          {activeTab !== null &&
-            !activeTab.length &&
-            'Henuz gosterilebilecek bir icerik yok.'}
+          {!activeTab.length || activeTab == undefined ? (
+            <p className="secondary">Henüz gösterilebilecek bir içerik yok.</p>
+          ) : (
+            activeTab.map((article) => {
+              return (
+                <Yazi isOnProfilePage={true} article={article} user={user} />
+              );
+            })
+          )}
         </Container>
       </Container>
     </>

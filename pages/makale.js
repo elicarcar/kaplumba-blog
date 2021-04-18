@@ -1,24 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Comment, Form, Button, Header, Message } from 'semantic-ui-react';
+import {
+  Comment,
+  Form,
+  Button,
+  Header,
+  Message,
+  Icon,
+} from 'semantic-ui-react';
 import baseUrl from '../utils/baseUrl';
 import axios from 'axios';
 import useSWR from 'swr';
 import Cookie from 'js-cookie';
 import moment from 'moment';
 
-const Makale = () => {
+const Makale = ({ user }) => {
   const token = Cookie.get('token');
   const router = useRouter();
   const { _id } = router.query;
   const [commentContent, setCommentContent] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleCommentPost = async () => {
+  const handleCommentPost = async (e) => {
     if (!commentContent.length) {
       return;
     }
 
     try {
+      setLoading(true);
       await axios.post(
         `${baseUrl}/api/comment`,
         { body: commentContent },
@@ -26,6 +35,9 @@ const Makale = () => {
       );
     } catch (error) {
       console.log(error);
+    } finally {
+      setCommentContent('');
+      setLoading(false);
     }
   };
 
@@ -41,16 +53,29 @@ const Makale = () => {
     refreshInterval: 2000,
   });
 
-  useEffect(() => {
-    console.log('hell', data);
-  }, []);
-
   function articleContent() {
     return { __html: data.content };
   }
 
   function handleTextareChange(e) {
     setCommentContent(e.target.value);
+  }
+
+  async function handleDeleteClick(id) {
+    try {
+      await axios.delete(`${baseUrl}/api/comment`, {
+        params: { cId: id, aId: data._id },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  function isAuthorsComment(comment) {
+    return comment.author._id == user._id;
+  }
+
+  if (data) {
   }
 
   if (error) return <Message error={true}>{error.response.data}</Message>;
@@ -64,18 +89,32 @@ const Makale = () => {
       <Comment.Group>
         <Header as="h3" dividing>
           Konusmalar
-          {data.comments.length && <span>{data.comments.length}</span>}
+          {data.comments.length && <span> {data.comments.length} </span>}
         </Header>
         {!data.comments.length ? (
-          <p>Bu yazi hakkinda daha bir konusma baslatilmamis. </p>
+          <p>Bu yazı hakkında daha bir konuşma başlatılmamış. </p>
         ) : (
           data.comments.map((comment) => {
             return (
               <Comment>
                 <Comment.Content>
-                  <Comment.Author as="a">{comment.author}</Comment.Author>
+                  <Comment.Author as="a">
+                    {comment.author.username}
+                  </Comment.Author>
                   <Comment.Metadata>
                     <div>Today at 5:42PM</div>
+                    {isAuthorsComment(comment) && (
+                      <Comment.Actions>
+                        <Comment.Action onClick={() => handleEditClick()}>
+                          <Icon name="edit" />
+                        </Comment.Action>
+                        <Comment.Action
+                          onClick={() => handleDeleteClick(comment._id)}
+                        >
+                          <Icon color="red" name="trash alternate" />
+                        </Comment.Action>
+                      </Comment.Actions>
+                    )}
                   </Comment.Metadata>
                   <Comment.Text>{comment.body}</Comment.Text>
                 </Comment.Content>
@@ -85,13 +124,17 @@ const Makale = () => {
         )}
 
         <Form reply>
-          <Form.TextArea onChange={(e) => handleTextareChange(e)} />
+          <Form.TextArea
+            value={commentContent}
+            onChange={(e) => handleTextareChange(e)}
+          />
           <Button
+            loading={loading}
             content="Fikir Belirt"
             labelPosition="left"
             icon="edit"
             color="teal"
-            onClick={() => handleCommentPost()}
+            onClick={(e) => handleCommentPost(e)}
           />
         </Form>
       </Comment.Group>

@@ -14,6 +14,18 @@ a {
 * {
   box-sizing: border-box;
 }
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  color: #141414;
+}
+
+.secondary {
+  color: #272727;
+}
 .nav_wrapper {
   display: flex;
   justify-content: space-between;
@@ -73,4 +85,12 @@ a {
 
 .bookmark:hover {
   color: teal;
+}
+
+.line {
+  min-height: 100vh;
+  background: linear-gradient(#f2eecb61, teal, #f2eecb61);
+  width: 3px;
+  margin-left: 15px;
+  margin-right: 15px;
 }

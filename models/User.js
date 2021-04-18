@@ -18,10 +18,8 @@ const UserSchema = new mongoose.Schema({
   },
   readLists: [
     {
-      item: {
-        type: ObjectId,
-        ref: 'Article',
-      },
+      type: ObjectId,
+      ref: 'Article',
     },
   ],
   articles: [{ type: ObjectId, ref: 'Article' }],

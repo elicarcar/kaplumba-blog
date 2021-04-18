@@ -74,7 +74,7 @@ const Makale = () => {
   return (
     <>
       <Container>
-        <Header as="h2">Makaleni Olustur</Header>
+        <Header as="h2">Makaleni Oluştur</Header>
         {success && (
           <Message
             success={success}
@@ -83,15 +83,17 @@ const Makale = () => {
         )}
 
         <Input
+          value={headerContent}
           loading={loading}
-          name="Baslik"
+          name="Başlık"
           onChange={(e) => onHeaderChange(e)}
+          fluid
         />
         <Editor
           loading={loading}
           editorState={editor}
           onEditorStateChange={setEditor}
-          placeholder="Tell a story..."
+          placeholder="Bir şeyler anlat..."
           spellCheck={true}
           toolbarClassName="toolbarClassName"
           wrapperClassName="wrapperClassName"
@@ -105,7 +107,7 @@ const Makale = () => {
           }}
         />
         <Button color="teal" type="button" onClick={() => publishDocs()}>
-          Yayinla
+          Yayınla
         </Button>
       </Container>
     </>

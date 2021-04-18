@@ -21,8 +21,8 @@ async function handleGetUser(req, res) {
     const _id = await authMiddleware(req, res);
 
     const user = await User.findOne({ _id })
-      .populate({ path: 'articles', model: 'Article' })
       .populate({ path: 'readLists', model: 'Article' })
+      .populate({ path: 'articles', model: 'Article' })
       .select('-password');
 
     if (!user) {

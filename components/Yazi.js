@@ -7,11 +7,11 @@ import Cookie from 'js-cookie';
 import moment from 'moment';
 import { useRouter } from 'next/router';
 
-const Yazi = ({ article, user }) => {
+const Yazi = ({ article, user, isOnProfilePage = false }) => {
   const formattedDate = moment(article.created_at).format('MM/DD/YYYY');
-  const shortContent = article.content.substring(0, 500) + '...';
+  const shortContent = article?.content?.substring(0, 500) + '...';
   const [loading, setLoading] = useState(false);
-  const [userList, setUserList] = useState(user.readLists);
+  const [userList, setUserList] = useState(user?.readLists);
   const router = useRouter();
 
   function articleContent() {
@@ -23,7 +23,7 @@ const Yazi = ({ article, user }) => {
   }
 
   function isUsers() {
-    return user.articles.filter((a) => a._id == article._id).length;
+    return user?.articles.filter((a) => a._id == article._id).length;
   }
 
   useEffect(() => {
@@ -34,7 +34,8 @@ const Yazi = ({ article, user }) => {
     isUsers();
   }, []);
 
-  async function addToReadingList() {
+  async function addToReadingList(e) {
+    e.stopPropagation();
     const token = await Cookie.get('token');
     if (!token) {
       return;
@@ -59,29 +60,59 @@ const Yazi = ({ article, user }) => {
     }
   }
 
+  async function handleDeleteArticle(e, id) {
+    e.stopPropagation();
+    try {
+      setLoading(true);
+      await axios.delete(`${baseUrl}/api/article`, { params: { _id: id } });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
-    <Link href={`/makale?_id=${article._id}`}>
+    <Link href={`/makale?_id=${article?._id}`}>
       <Card className="article pointer" fluid>
         {!isUsers() && (
           <Card.Content extra>
-            <span className="bookmark" onClick={() => addToReadingList()}>
+            <span className="bookmark" onClick={(e) => addToReadingList(e)}>
               <Icon
                 loading={loading}
                 color={isInList() ? 'red' : 'teal'}
                 name="bookmark"
               />
-              {isInList() ? 'Listemden cikar' : 'Listeme ekle'}
+              {isInList() ? 'Listemden çıkar' : 'Listeme ekle'}
             </span>
           </Card.Content>
         )}
 
+        {isOnProfilePage && isUsers() ? (
+          <Card.Content extra>
+            <Link href="/profilim/duzenle">
+              <Icon loading={loading} name="edit" />
+            </Link>
+            <span>
+              <Icon
+                loading={loading}
+                name="delete"
+                onClick={(e) => handleDeleteArticle(e, article?._id)}
+                color="red"
+              />
+            </span>
+          </Card.Content>
+        ) : (
+          ''
+        )}
+
         <Card.Content>
           <Card.Description className="d-flex justify-between ">
-            <Card.Meta>{article.author.username}</Card.Meta>
+            <Card.Meta>{article?.author?.username}</Card.Meta>
             <Card.Meta>{formattedDate}</Card.Meta>
           </Card.Description>
 
-          <Card.Header>{article.header}</Card.Header>
+          <Card.Header>{article?.header}</Card.Header>
           <Card.Description dangerouslySetInnerHTML={articleContent()} />
         </Card.Content>
       </Card>

@@ -16,7 +16,7 @@ export default async (req, res) => {
       model: 'Article',
     });
 
-    const isInList = user.readLists.find((item) => item._id == articleId);
+    const isInList = user.readLists.find((item) => item == articleId);
 
     if (!isInList) {
       user = await User.findByIdAndUpdate(
@@ -31,7 +31,7 @@ export default async (req, res) => {
         { new: true }
       );
     }
-
+    console.log(user.readLists);
     res.status(201).json(user.readLists);
   } catch (error) {
     console.log(error);

@@ -20,11 +20,11 @@ function Home({ articles, user }) {
           ))}
         </Container>
       ) : (
-        <div class="d-flex flex-column justify-center align-center h-50">
-          <p>Gosterilecek hic makale yok.</p>
+        <div className="d-flex flex-column justify-center align-center h-50">
+          <p>Gösterilecek hiç makale yok.</p>
           <p>
             <Link href="/profilim/makale">Buradan</Link> yeni bir makale
-            olusturmaya baslayabilirsiniz.
+            oluşturmaya başlayabilirsiniz.
           </p>
         </div>
       )}

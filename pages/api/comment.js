@@ -23,7 +23,7 @@ async function handlePostRequest(req, res) {
       );
   }
   try {
-    const user = await User.findById({ _id });
+    const user = await User.findOne({ _id });
 
     const comment = await new Comment({
       author: user,
@@ -39,5 +39,23 @@ async function handlePostRequest(req, res) {
     res.status(201).json(updateArticle);
   } catch (error) {
     res.status(500).send('Internal server error');
+  }
+}
+
+async function handleDeleteRequest(req, res) {
+  const _id = await authMiddleware(req, res);
+  try {
+    const { cId, aId } = req.query;
+
+    await Article.findByIdAndUpdate(
+      { _id: aId },
+      { $pull: { comments: cId } },
+      { new: true }
+    );
+    await Comment.findOneAndDelete({ _id: cId });
+
+    res.status(204).send({});
+  } catch (error) {
+    res.status(500).send('Internal server error.');
   }
 }

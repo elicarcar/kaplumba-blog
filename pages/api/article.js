@@ -26,7 +26,12 @@ async function handleGetRequest(req, res) {
     const article = await Article.findOne({ _id }).populate({
       path: 'comments',
       model: 'Comment',
+      populate: {
+        path: 'author',
+        model: 'User',
+      },
     });
+
     res.status(200).json(article);
   } catch (error) {
     res.status(500).send('Internal server error.');
