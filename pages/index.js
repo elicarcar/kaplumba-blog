@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
 import Yazi from '../components/Yazi';
-import { Container } from 'semantic-ui-react';
+import { Container, Header } from 'semantic-ui-react';
 import { parseCookies } from 'nookies';
 import baseUrl from '../utils/baseUrl';
 import axios from 'axios';
 import Link from 'next/link';
+import ArticlesPagination from '../components/ArticlesPagination';
 
-function Home({ articles, user }) {
+function Home({ articles, totalPages, user }) {
   useEffect(() => {
     console.log(articles);
   });
@@ -15,13 +16,15 @@ function Home({ articles, user }) {
     <>
       {articles.length ? (
         <Container>
+          <Header as="h1" textAlign="center" content="Makaleler" />
           {articles.map((article, i) => (
             <Yazi article={article} key={i} user={user} />
           ))}
+          <ArticlesPagination totalPages={totalPages} />
         </Container>
       ) : (
         <div className="d-flex flex-column justify-center align-center h-50">
-          <p>Gösterilecek hiç makale yok.</p>
+          <p>Gosterilecek hic makale yok.</p>
           <p>
             <Link href="/profilim/makale">Buradan</Link> yeni bir makale
             oluşturmaya başlayabilirsiniz.
@@ -36,11 +39,15 @@ Home.getInitialProps = async (ctx) => {
   const { token } = parseCookies(ctx);
 
   try {
-    const res = await axios.get(`${baseUrl}/api/articles`, {
+    const page = ctx.query.page ? ctx.query.page : '1';
+    const size = 5;
+    const url = `${baseUrl}/api/articles`;
+    const payload = {
+      params: { page, size },
       headers: { Authorization: token },
-    });
-
-    return { articles: res.data };
+    };
+    const res = await axios.get(url, payload);
+    return res.data;
   } catch (error) {
     console.log('bok');
   }

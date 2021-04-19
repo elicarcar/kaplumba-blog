@@ -16,22 +16,22 @@ export default async (req, res) => {
       model: 'Article',
     });
 
-    const isInList = user.readLists.find((item) => item == articleId);
+    const isInList = user.readLists.filter((item) => item._id == articleId);
 
-    if (!isInList) {
+    if (isInList.length > 0) {
       user = await User.findByIdAndUpdate(
         { _id },
-        { $push: { readLists: { _id: articleId } } },
+        { $pull: { readLists: articleId } },
         { new: true }
       );
     } else {
       user = await User.findByIdAndUpdate(
         { _id },
-        { $pull: { readLists: { _id: articleId } } },
+        { $push: { readLists: articleId } },
         { new: true }
       );
     }
-    console.log(user.readLists);
+
     res.status(201).json(user.readLists);
   } catch (error) {
     console.log(error);

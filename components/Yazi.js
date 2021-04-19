@@ -28,7 +28,7 @@ const Yazi = ({ article, user, isOnProfilePage = false }) => {
 
   useEffect(() => {
     isInList();
-  }, [userList.length]);
+  }, [userList]);
 
   useEffect(() => {
     isUsers();
@@ -53,7 +53,7 @@ const Yazi = ({ article, user, isOnProfilePage = false }) => {
       );
       const user = await res.data;
 
-      setUserList(user);
+      await setUserList(user);
     } catch (error) {
     } finally {
       setLoading(false);
@@ -62,9 +62,13 @@ const Yazi = ({ article, user, isOnProfilePage = false }) => {
 
   async function handleDeleteArticle(e, id) {
     e.stopPropagation();
+    const token = await Cookie.get('token');
     try {
       setLoading(true);
-      await axios.delete(`${baseUrl}/api/article`, { params: { _id: id } });
+      await axios.delete(`${baseUrl}/api/article`, {
+        params: { _id: id },
+        headers: { Authorization: token },
+      });
     } catch (error) {
       console.log(error);
     } finally {
@@ -90,7 +94,7 @@ const Yazi = ({ article, user, isOnProfilePage = false }) => {
 
         {isOnProfilePage && isUsers() ? (
           <Card.Content extra>
-            <Link href="/profilim/duzenle">
+            <Link href={`/profilim/duzenle?_id=${article?._id}`}>
               <Icon loading={loading} name="edit" />
             </Link>
             <span>

@@ -6,6 +6,8 @@ import authMiddleware from '../../utils/auth';
 export default async (req, res) => {
   if (req.method === 'POST') {
     handlePostRequest(req, res);
+  } else if (req.method === 'PUT') {
+    handlePutRequest(req, res);
   } else if (req.method === 'DELETE') {
     handleDeleteRequest(req, res);
   }
@@ -42,6 +44,24 @@ async function handlePostRequest(req, res) {
   }
 }
 
+async function handlePutRequest(req, res) {
+  const _id = await authMiddleware(req, res);
+  try {
+    const { aid, cId } = req.query;
+    const { body } = req.body;
+    const user = await User.findOne({ _id });
+    const comment = await Comment.findOneAndUpdate(
+      { _id: cId },
+      { author: user, body: body },
+      { new: true }
+    );
+
+    res.status(201).json(comment);
+  } catch (error) {
+    res.status(500).send('Internal server error.');
+  }
+}
+
 async function handleDeleteRequest(req, res) {
   const _id = await authMiddleware(req, res);
   try {
@@ -49,7 +69,7 @@ async function handleDeleteRequest(req, res) {
 
     await Article.findByIdAndUpdate(
       { _id: aId },
-      { $pull: { comments: cId } },
+      { $pull: { comments: { _id: cId } } },
       { new: true }
     );
     await Comment.findOneAndDelete({ _id: cId });

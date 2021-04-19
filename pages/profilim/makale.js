@@ -19,6 +19,7 @@ const Makale = () => {
   const [headerContent, setHeader] = useState('');
   const [success, setSucess] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [headerError, setHeaderError] = useState(false);
 
   const exportHTML = () => {
     setContentState(convertToHTML(editor.getCurrentContent()));
@@ -34,6 +35,7 @@ const Makale = () => {
 
   const publishDocs = async () => {
     if (!headerContent.length || !contentState.length) {
+      setHeaderError(true);
       return;
     }
 
@@ -67,6 +69,7 @@ const Makale = () => {
     } finally {
       setLoading(false);
       setHeader('');
+      setHeaderError(false);
       setEditor(EditorState.createEmpty());
     }
   };
@@ -88,6 +91,9 @@ const Makale = () => {
           name="Başlık"
           onChange={(e) => onHeaderChange(e)}
           fluid
+          required
+          placeholder="Bir başlık girin"
+          error={headerError}
         />
         <Editor
           loading={loading}
@@ -104,6 +110,16 @@ const Makale = () => {
             textAlign: { inDropdown: true },
             link: { inDropdown: true },
             history: { inDropdown: true },
+            image: {
+              urlEnabled: true,
+              uploadEnabled: true,
+              alignmentEnabled: true,
+              defaultSize: {
+                height: 'auto',
+                width: 'auto',
+              },
+            },
+            previewImage: true,
           }}
         />
         <Button color="teal" type="button" onClick={() => publishDocs()}>

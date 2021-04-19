@@ -20,6 +20,8 @@ const Makale = ({ user }) => {
   const { _id } = router.query;
   const [commentContent, setCommentContent] = useState('');
   const [loading, setLoading] = useState(false);
+  const [commentEditing, setCommentEditing] = useState(false);
+  const [commentId, setCommentId] = useState('');
 
   const handleCommentPost = async (e) => {
     if (!commentContent.length) {
@@ -62,20 +64,47 @@ const Makale = ({ user }) => {
   }
 
   async function handleDeleteClick(id) {
+    if (!token) {
+      return;
+    }
     try {
       await axios.delete(`${baseUrl}/api/comment`, {
         params: { cId: id, aId: data._id },
+        headers: { Authorization: token },
       });
     } catch (error) {
       console.log(error);
     }
   }
 
-  function isAuthorsComment(comment) {
-    return comment.author._id == user._id;
+  async function handleEditClick(e, comment) {
+    setCommentEditing(true);
+    setCommentContent(comment.body);
+    setCommentId(comment._id);
   }
 
-  if (data) {
+  async function handleEditPost() {
+    try {
+      setLoading(true);
+      await axios.put(
+        `${baseUrl}/api/comment`,
+        { body: commentContent },
+        {
+          headers: { Authorization: token },
+          params: { aid: _id, cId: commentId },
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setCommentContent('');
+      setLoading(false);
+      setCommentEditing(false);
+    }
+  }
+
+  function isAuthorsComment(comment) {
+    return comment.author._id == user._id;
   }
 
   if (error) return <Message error={true}>{error.response.data}</Message>;
@@ -88,7 +117,7 @@ const Makale = ({ user }) => {
 
       <Comment.Group>
         <Header as="h3" dividing>
-          Konusmalar
+          Konuşmalar
           {data.comments.length && <span> {data.comments.length} </span>}
         </Header>
         {!data.comments.length ? (
@@ -96,7 +125,7 @@ const Makale = ({ user }) => {
         ) : (
           data.comments.map((comment) => {
             return (
-              <Comment>
+              <Comment key={comment._id}>
                 <Comment.Content>
                   <Comment.Author as="a">
                     {comment.author.username}
@@ -105,7 +134,9 @@ const Makale = ({ user }) => {
                     <div>Today at 5:42PM</div>
                     {isAuthorsComment(comment) && (
                       <Comment.Actions>
-                        <Comment.Action onClick={() => handleEditClick()}>
+                        <Comment.Action
+                          onClick={(e) => handleEditClick(e, comment)}
+                        >
                           <Icon name="edit" />
                         </Comment.Action>
                         <Comment.Action
@@ -128,14 +159,25 @@ const Makale = ({ user }) => {
             value={commentContent}
             onChange={(e) => handleTextareChange(e)}
           />
-          <Button
-            loading={loading}
-            content="Fikir Belirt"
-            labelPosition="left"
-            icon="edit"
-            color="teal"
-            onClick={(e) => handleCommentPost(e)}
-          />
+          {commentEditing ? (
+            <Button
+              loading={loading}
+              content="Yorumunu duzenle"
+              labelPosition="left"
+              icon="edit"
+              color="Yellow"
+              onClick={(e) => handleEditPost(e)}
+            />
+          ) : (
+            <Button
+              loading={loading}
+              content="Fikir Belirt"
+              labelPosition="left"
+              icon="edit"
+              color="teal"
+              onClick={(e) => handleCommentPost(e)}
+            />
+          )}
         </Form>
       </Comment.Group>
     </article>

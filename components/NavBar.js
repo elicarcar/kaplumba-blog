@@ -5,11 +5,11 @@ import { destroyCookie } from 'nookies';
 import Link from 'next/link';
 import NProgress from 'nprogress';
 
-Router.onRouteChangeStart = () => NProgress.start();
-Router.onRouteChangeComplete = () => NProgress.done();
-Router.onRouteChangeError = () => NProgress.done();
-
 function NavBar({ user }) {
+  Router.onRouteChangeStart = () => NProgress.start();
+  Router.onRouteChangeComplete = () => NProgress.done();
+  Router.onRouteChangeError = () => NProgress.done();
+
   const router = useRouter();
   const [activeItem, setActiveItem] = useState('');
 
@@ -19,7 +19,11 @@ function NavBar({ user }) {
   }
 
   return (
-    <Segment className="nav_wrapper radius-none align-baseline" inverted>
+    <Segment
+      id="navBar"
+      className="nav_wrapper radius-none align-baseline"
+      inverted
+    >
       <Menu borderless inverted pointing secondary stackable>
         <Link href="/">
           <Menu.Item active={router.asPath === '/'}>

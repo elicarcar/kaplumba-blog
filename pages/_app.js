@@ -6,6 +6,7 @@ import { parseCookies, destroyCookie } from 'nookies';
 import baseUrl from '../utils/baseUrl';
 import 'semantic-ui-css/semantic.min.css';
 import { redirectUser } from '../utils/clientAuth';
+import '../styles/nprogress.css';
 
 function MyApp({ Component, pageProps }) {
   return (

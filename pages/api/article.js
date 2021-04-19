@@ -22,7 +22,7 @@ async function handleGetRequest(req, res) {
   try {
     await authMiddleware(req, res);
     const { _id } = req.query;
-    console.log('hello', _id);
+
     const article = await Article.findOne({ _id }).populate({
       path: 'comments',
       model: 'Comment',
@@ -75,7 +75,7 @@ async function handlePostRequest(req, res) {
 
       res.status(201).json(user);
     } else {
-      res.status(404).send('User not found');
+      res.status(404).send('Kullanici bulunamadi.');
     }
   } catch (error) {
     console.log(error);
@@ -85,7 +85,10 @@ async function handlePostRequest(req, res) {
 
 async function handleDeleteRequest(req, res) {
   try {
-    await authMiddleware(req, res);
+    const id = await authMiddleware(req, res);
+    if (!id) {
+      res.status(401).send('Izin yok.');
+    }
     const { _id } = req.query;
     await Article.findOneAndDelete({ _id });
 
