@@ -10,13 +10,8 @@ export default function Profilim({ user }) {
   const [activeTab, setActiveTab] = useState(user.articles);
 
   function handleMenuItemClick(e, data) {
-    console.log(data.value);
     setActiveTab(data.value);
   }
-
-  useEffect(() => {
-    console.log(user);
-  });
 
   return (
     <>

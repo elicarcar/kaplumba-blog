@@ -35,7 +35,6 @@ const Login = ({ user }) => {
 
   useEffect(() => {
     resetMessage();
-    console.log('cleaned');
 
     return () => {
       clearTimeout(resetMessage());
@@ -66,7 +65,6 @@ const Login = ({ user }) => {
 
       router.push('/profilim');
     } catch (error) {
-      console.log(error.response.data);
       setError(true);
       setErrorContent(error.response.data);
     } finally {

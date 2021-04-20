@@ -8,10 +8,6 @@ import Link from 'next/link';
 import ArticlesPagination from '../components/ArticlesPagination';
 
 function Home({ articles, totalPages, user }) {
-  useEffect(() => {
-    console.log(articles);
-  });
-
   return (
     <>
       {articles.length ? (

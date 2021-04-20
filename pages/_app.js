@@ -16,7 +16,7 @@ function MyApp({ Component, pageProps }) {
   );
 }
 
-MyApp.getInitialProps = async ({ res, ctx, Component }) => {
+MyApp.getInitialProps = async ({ ctx, Component }) => {
   const { token } = await parseCookies(ctx);
 
   let pageProps = {};
@@ -29,8 +29,13 @@ MyApp.getInitialProps = async ({ res, ctx, Component }) => {
   }
 
   if (!notProtectedRoute && !token) {
-    res.writeHead(302, { Location: `${baseUrl}/login` });
-    res.end();
+    if (typeof window === 'undefined' || ctx.req) {
+      ctx.res.writeHead(302, { location: '/login' });
+      ctx.res.end();
+    } else {
+      // On client
+      Router.push('/login');
+    }
   }
 
   try {

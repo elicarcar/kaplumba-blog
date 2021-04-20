@@ -31,7 +31,6 @@ const Kaydol = () => {
 
   useEffect(() => {
     resetMessage();
-    console.log('cleaned');
 
     return () => {
       clearTimeout(resetMessage());
