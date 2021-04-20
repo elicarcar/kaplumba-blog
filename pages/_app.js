@@ -10,7 +10,7 @@ import '../styles/nprogress.css';
 import App from 'next/app';
 
 class MyApp extends App {
-  static async getInitialProps({ ctx, Component }) {
+  static async getInitialProps({ res, ctx, Component }) {
     const { token } = await parseCookies(ctx);
 
     let pageProps = {};
@@ -23,7 +23,14 @@ class MyApp extends App {
     }
 
     if (!notProtectedRoute && !token) {
-      Router.push('/login');
+      if (ctx.req) {
+        res.writeHead(301, {
+          Location: 'new/url/destination/here',
+        });
+        res.end();
+      } else {
+        Router.push('/login');
+      }
     }
 
     try {
