@@ -129,9 +129,7 @@ Edit.getInitialProps = async (ctx) => {
     const res = await axios.get(`${baseUrl}/api/article`, payload);
 
     return { article: res.data };
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export default Edit;
