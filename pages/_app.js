@@ -16,7 +16,7 @@ function MyApp({ Component, pageProps }) {
   );
 }
 
-MyApp.getInitialProps = async ({ ctx, Component }) => {
+MyApp.getInitialProps = async ({ res, ctx, Component }) => {
   const { token } = await parseCookies(ctx);
 
   let pageProps = {};
@@ -29,8 +29,8 @@ MyApp.getInitialProps = async ({ ctx, Component }) => {
   }
 
   if (!notProtectedRoute && !token) {
-    ctx.res.writeHead(302, { Location: '/login' });
-    ctx.res.end();
+    res.writeHead(302, { Location: `${baseUrl}/login` });
+    res.end();
   }
 
   try {
