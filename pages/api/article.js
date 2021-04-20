@@ -23,14 +23,19 @@ async function handleGetRequest(req, res) {
     await authMiddleware(req, res);
     const { _id } = req.query;
 
-    const article = await Article.findOne({ _id }).populate({
-      path: 'comments',
-      model: 'Comment',
-      populate: {
+    const article = await Article.findOne({ _id })
+      .populate({
+        path: 'comments',
+        model: 'Comment',
+        populate: {
+          path: 'author',
+          model: 'User',
+        },
+      })
+      .populate({
         path: 'author',
         model: 'User',
-      },
-    });
+      });
 
     res.status(200).json(article);
   } catch (error) {

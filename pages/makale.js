@@ -23,6 +23,8 @@ const Makale = ({ user }) => {
   const [commentEditing, setCommentEditing] = useState(false);
   const [commentId, setCommentId] = useState('');
 
+  //const formattedCommentDate = (date) => moment(date).startOf('day');
+
   const handleCommentPost = async (e) => {
     if (!commentContent.length) {
       return;
@@ -112,7 +114,16 @@ const Makale = ({ user }) => {
 
   return (
     <article className="container">
-      <h1>{data.header}</h1>
+      <section className="d-flex justify-between">
+        <h1>{data.header}</h1>
+        <div>
+          <p className="ma-0 secondary">{data.author.username}</p>
+          <p className="ma-0 secondary">
+            {moment(data.createdAt).format('MM/DD/YYYY')}
+          </p>
+        </div>
+      </section>
+
       <section dangerouslySetInnerHTML={articleContent()} />
 
       <Comment.Group>
@@ -127,26 +138,36 @@ const Makale = ({ user }) => {
             return (
               <Comment key={comment._id}>
                 <Comment.Content>
-                  <Comment.Author as="a">
-                    {comment.author.username}
-                  </Comment.Author>
-                  <Comment.Metadata>
-                    <div>Today at 5:42PM</div>
-                    {isAuthorsComment(comment) && (
-                      <Comment.Actions>
-                        <Comment.Action
-                          onClick={(e) => handleEditClick(e, comment)}
-                        >
-                          <Icon name="edit" />
-                        </Comment.Action>
-                        <Comment.Action
-                          onClick={() => handleDeleteClick(comment._id)}
-                        >
-                          <Icon color="red" name="trash alternate" />
-                        </Comment.Action>
-                      </Comment.Actions>
-                    )}
-                  </Comment.Metadata>
+                  <div className="d-flex justify-between">
+                    <section>
+                      <Comment.Author as="a">
+                        {comment.author.username}
+                      </Comment.Author>
+                      <Comment.Metadata>
+                        {moment(comment.createdAt).fromNow()}
+                      </Comment.Metadata>
+                    </section>
+                    <section>
+                      {isAuthorsComment(comment) && (
+                        <Comment.Actions>
+                          <Comment.Action
+                            onClick={(e) => handleEditClick(e, comment)}
+                          >
+                            <Icon size="large" name="edit" />
+                          </Comment.Action>
+                          <Comment.Action
+                            onClick={() => handleDeleteClick(comment._id)}
+                          >
+                            <Icon
+                              size="large"
+                              color="red"
+                              name="trash alternate"
+                            />
+                          </Comment.Action>
+                        </Comment.Actions>
+                      )}
+                    </section>
+                  </div>
                   <Comment.Text>{comment.body}</Comment.Text>
                 </Comment.Content>
               </Comment>
