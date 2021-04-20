@@ -4,14 +4,13 @@ import baseUrl from './baseUrl';
 
 export const setCookie = (token) => {
   Cookies.set('token', token.data);
-  window.location.href = `${baseUrl}/profilim`;
+  Router.push('/profilim');
 };
 
 export function redirectUser(ctx, location) {
   if (ctx.req) {
-    // ctx.res.writeHead(302, { Location: location });
-    // ctx.res.end();
-    window.location.href = `${baseUrl}/${location}`;
+    ctx.res.writeHead(302, { Location: location });
+    ctx.res.end();
   }
 }
 

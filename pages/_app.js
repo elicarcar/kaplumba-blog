@@ -29,7 +29,8 @@ MyApp.getInitialProps = async ({ ctx, Component }) => {
   }
 
   if (!notProtectedRoute && !token) {
-    redirectUser(ctx, '/login');
+    ctx.res.writeHead(302, { Location: '/login' });
+    ctx.res.end();
   }
 
   try {
