@@ -20,7 +20,7 @@ export default function Profilim({ user }) {
 
   return (
     <>
-      <Container className="d-flex container">
+      <Container className="d-flex profil container">
         <Container>
           <Header as="h1">{`Hoşgeldin ${user.username}`}</Header>
           <p className="secondary">

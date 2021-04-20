@@ -24,7 +24,7 @@ function NavBar({ user }) {
       className="nav_wrapper radius-none align-baseline"
       inverted
     >
-      <Menu borderless inverted pointing secondary stackable>
+      <Menu borderless inverted pointing secondary>
         <Link href="/">
           <Menu.Item active={router.asPath === '/'}>
             <Icon name="qq" />
@@ -32,7 +32,7 @@ function NavBar({ user }) {
           </Menu.Item>
         </Link>
       </Menu>
-      <Menu inverted borderless pointing secondary stackable>
+      <Menu inverted borderless pointing secondary>
         {user && (
           <Link href="/profilim">
             <Menu.Item active={router.asPath === '/profilim'}>

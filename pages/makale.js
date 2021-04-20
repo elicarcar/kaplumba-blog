@@ -7,6 +7,7 @@ import {
   Header,
   Message,
   Icon,
+  Modal,
 } from 'semantic-ui-react';
 import baseUrl from '../utils/baseUrl';
 import axios from 'axios';
@@ -22,6 +23,7 @@ const Makale = ({ user }) => {
   const [loading, setLoading] = useState(false);
   const [commentEditing, setCommentEditing] = useState(false);
   const [commentId, setCommentId] = useState('');
+  const [open, setOpen] = useState(false);
 
   //const formattedCommentDate = (date) => moment(date).startOf('day');
 
@@ -105,6 +107,11 @@ const Makale = ({ user }) => {
     }
   }
 
+  async function handleCancelEditPost() {
+    setCommentContent('');
+    setCommentEditing(false);
+  }
+
   function isAuthorsComment(comment) {
     return comment.author._id == user._id;
   }
@@ -181,14 +188,23 @@ const Makale = ({ user }) => {
             onChange={(e) => handleTextareChange(e)}
           />
           {commentEditing ? (
-            <Button
-              loading={loading}
-              content="Yorumunu duzenle"
-              labelPosition="left"
-              icon="edit"
-              color="Yellow"
-              onClick={(e) => handleEditPost(e)}
-            />
+            <Button.Group compact>
+              <Button
+                loading={loading}
+                content="Yorumunu duzenle"
+                labelPosition="left"
+                icon="edit"
+                color="purple"
+                onClick={(e) => handleEditPost(e)}
+              />
+              <Button
+                content="Iptal"
+                labelPosition="left"
+                icon="cancel"
+                color="yellow"
+                onClick={(e) => handleCancelEditPost(e)}
+              />
+            </Button.Group>
           ) : (
             <Button
               loading={loading}
