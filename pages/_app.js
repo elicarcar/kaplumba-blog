@@ -23,8 +23,7 @@ class MyApp extends App {
     }
 
     if (!notProtectedRoute && !token) {
-      ctx.res.writeHead(302, { Location: '/login' });
-      ctx.res.end();
+      Router.push('/login');
     }
 
     try {
