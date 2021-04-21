@@ -5,9 +5,16 @@ import isLength from 'validator/lib/isLength';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import connectDb from '../../utils/db';
+import NextCors from 'nextjs-cors';
 
 connectDb();
 export default async (req, res) => {
+  await NextCors(req, res, {
+    // Options
+    methods: ['POST'],
+    origin: '*',
+    optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+  });
   const { username, email, password } = req.body;
   const isValidEmail = isEmail(email);
   const isEmptyUserName = isEmpty(username);

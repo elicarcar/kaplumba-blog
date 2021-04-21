@@ -2,9 +2,16 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../../models/User';
 import connectDb from '../../utils/db';
+import NextCors from 'nextjs-cors';
 
 connectDb();
 export default async (req, res) => {
+  await NextCors(req, res, {
+    // Options
+    methods: ['GET', 'POST'],
+    origin: '*',
+    optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+  });
   try {
     const { email, password } = req.body;
 

@@ -3,6 +3,7 @@ import User from '../../models/User';
 import Comment from '../../models/Comment';
 import authMiddleware from '../../utils/auth';
 import connectDb from '../../utils/db';
+import NextCors from 'nextjs-cors';
 
 connectDb();
 
@@ -20,6 +21,12 @@ export default async function handleRequest(req, res) {
 
 async function handleGetRequest(req, res) {
   try {
+    await NextCors(req, res, {
+      // Options
+      methods: ['GET', 'PUT', 'POST', 'DELETE'],
+      origin: '*',
+      optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+    });
     await authMiddleware(req, res);
     const { _id } = req.query;
 
@@ -45,6 +52,12 @@ async function handleGetRequest(req, res) {
 
 async function handlePutRequest(req, res) {
   try {
+    await NextCors(req, res, {
+      // Options
+      methods: ['GET', 'PUT', 'POST', 'DELETE'],
+      origin: '*',
+      optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+    });
     await authMiddleware(req, res);
     const { _id } = req.query;
     const { header, content } = req.body;
@@ -61,6 +74,12 @@ async function handlePutRequest(req, res) {
 
 async function handlePostRequest(req, res) {
   try {
+    await NextCors(req, res, {
+      // Options
+      methods: ['GET', 'PUT', 'POST', 'DELETE'],
+      origin: '*',
+      optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+    });
     const userId = await authMiddleware(req, res);
 
     const { header, content } = req.body;
@@ -90,6 +109,12 @@ async function handlePostRequest(req, res) {
 
 async function handleDeleteRequest(req, res) {
   try {
+    await NextCors(req, res, {
+      // Options
+      methods: ['GET', 'PUT', 'POST', 'DELETE'],
+      origin: '*',
+      optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+    });
     const id = await authMiddleware(req, res);
     if (!id) {
       res.status(401).send('Izin yok.');
