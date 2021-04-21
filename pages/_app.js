@@ -7,87 +7,48 @@ import baseUrl from '../utils/baseUrl';
 import 'semantic-ui-css/semantic.min.css';
 import { redirectUser } from '../utils/clientAuth';
 import '../styles/nprogress.css';
-import App from 'next/app';
 
-class MyApp extends App {
-  static async getInitialProps({ ctx, Component }) {
-    const { token } = await parseCookies(ctx);
+function MyApp({ Component, pageProps }) {
+  const token = Cookie.get('token');
 
-    let pageProps = {};
+  const notProtectedRoute =
+    Router.pathname == '/kaydol' || Router.pathname == '/login';
 
-    // const notProtectedRoute =
-    //   ctx.pathname == '/kaydol' || ctx.pathname == '/login';
-
-    if (Component.getInitialProps) {
-      pageProps = await Component.getInitialProps(ctx);
+  useEffect(() => {
+    if (!notProtectedRoute && !token) {
+      Router.push('/login');
     }
+  }, [Router.pathname]);
 
-    // if (!notProtectedRoute && !token) {
-    //   if (ctx.req) {
-    //     res.writeHead(301, {
-    //       Location: 'new/url/destination/here',
-    //     });
-    //     res.end();
-    //   } else {
-    //     Router.push('/login');
-    //   }
-    // }
-
-    try {
-      const payload = {
-        headers: { Authorization: token },
-      };
-      const res = await axios.get(`${baseUrl}/api/user`, payload);
-      const user = await res.data;
-      pageProps.user = user;
-    } catch (error) {
-      //Throw out invalid token
-      destroyCookie(ctx, 'token');
-    }
-
-    return { pageProps };
-  }
-
-  render() {
-    const { Component, pageProps } = this.props;
-    return (
-      <Layout {...pageProps}>
-        <Component {...pageProps} />
-      </Layout>
-    );
-  }
+  return (
+    <Layout {...pageProps}>
+      <Component {...pageProps} />
+    </Layout>
+  );
 }
 
-// MyApp.getInitialProps = async ({ ctx, Component }) => {
-//   const { token } = await parseCookies(ctx);
+MyApp.getInitialProps = async ({ ctx, Component }) => {
+  const { token } = await parseCookies(ctx);
 
-//   let pageProps = {};
+  let pageProps = {};
 
-//   const notProtectedRoute =
-//     ctx.pathname == '/kaydol' || ctx.pathname == '/login';
+  if (Component.getInitialProps) {
+    pageProps = await Component.getInitialProps(ctx);
+  }
 
-//   if (Component.getInitialProps) {
-//     pageProps = await Component.getInitialProps(ctx);
-//   }
+  try {
+    const payload = {
+      headers: { Authorization: token },
+    };
+    const res = await axios.get(`${baseUrl}/api/user`, payload);
+    const user = await res.data;
+    pageProps.user = user;
+  } catch (error) {
+    //Throw out invalid token
+    destroyCookie(ctx, 'token');
+  }
 
-//   if (!notProtectedRoute && !token) {
-//     ctx.res.writeHead(302, { Location: '/login' });
-//     ctx.res.end();
-//   }
-
-//   try {
-//     const payload = {
-//       headers: { Authorization: token },
-//     };
-//     const res = await axios.get(`${baseUrl}/api/user`, payload);
-//     const user = await res.data;
-//     pageProps.user = user;
-//   } catch (error) {
-//     //Throw out invalid token
-//     destroyCookie(ctx, 'token');
-//   }
-
-//   return { pageProps };
-// };
+  return { pageProps };
+};
 
 export default MyApp;
