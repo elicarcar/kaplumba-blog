@@ -6,8 +6,15 @@ import baseUrl from '../utils/baseUrl';
 import axios from 'axios';
 import Link from 'next/link';
 import ArticlesPagination from '../components/ArticlesPagination';
+import Router from 'next/router';
 
-function Home({ articles, totalPages, user }) {
+function Home({ articles = [], totalPages = [], user }) {
+  useEffect(() => {
+    if (!user || !articles) {
+      Router.push('/login');
+    }
+  }, []);
+
   return (
     <>
       {articles.length ? (

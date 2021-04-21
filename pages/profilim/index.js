@@ -7,7 +7,7 @@ import UserMenuItem from '../../components/dashboard/UserMenuItem';
 import Yazi from '../../components/Yazi';
 
 export default function Profilim({ user }) {
-  const [activeTab, setActiveTab] = useState(user.articles);
+  const [activeTab, setActiveTab] = useState(user?.articles);
 
   function handleMenuItemClick(e, data) {
     setActiveTab(data.value);
@@ -17,7 +17,7 @@ export default function Profilim({ user }) {
     <>
       <Container className="d-flex profil container">
         <Container>
-          <Header as="h1">{`Hoşgeldin ${user.username}`}</Header>
+          <Header as="h1">{`Hoşgeldin ${user?.username}`}</Header>
           <p className="secondary">
             Burada okuma listeni ve makalelerini görebilir, isteğine göre
             düzenleyebilirsin.
@@ -25,15 +25,15 @@ export default function Profilim({ user }) {
           <UserMenu>
             <UserMenuItem
               itemName="Makalelerim"
-              itemValue={user.articles}
+              itemValue={user?.articles}
               handleMenuItemClick={(e, data) => handleMenuItemClick(e, data)}
             >
-              <Label color="teal">{user.articles.length}</Label>
+              <Label color="teal">{user?.articles.length}</Label>
             </UserMenuItem>
             <UserMenuItem
               itemName="Okuma Listem"
               iconName="bookmark"
-              itemValue={user.readLists}
+              itemValue={user?.readLists}
               handleMenuItemClick={(e, data) => handleMenuItemClick(e, data)}
             />
             <UserMenuItem>

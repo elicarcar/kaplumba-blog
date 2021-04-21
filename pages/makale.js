@@ -15,7 +15,7 @@ import useSWR from 'swr';
 import Cookie from 'js-cookie';
 import moment from 'moment';
 
-const Makale = ({ user }) => {
+const Makale = ({ user = {} }) => {
   const token = Cookie.get('token');
   const router = useRouter();
   const { _id } = router.query;
