@@ -57,6 +57,6 @@ export default async (req, res) => {
     return res.status(201).json(token);
   } catch (error) {
     console.error(error);
-    res.status(500).send(error);
+    res.status(500).send(error.response.data);
   }
 };
