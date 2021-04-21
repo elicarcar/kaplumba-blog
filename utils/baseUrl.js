@@ -1,6 +1,6 @@
 const baseUrl =
   process.env.NODE_ENV === 'production'
-    ? 'https://kaplumba-blog.vercel.app'
+    ? 'https://kaplumba.herokuapp.com'
     : 'http://localhost:3000';
 
 export default baseUrl;
