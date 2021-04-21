@@ -29,6 +29,7 @@ export default async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    console.log('no login for you');
     res.status(500).send('Internal server error');
   }
 };
