@@ -37,7 +37,14 @@ const Makale = ({ user = {} }) => {
       await axios.post(
         `${baseUrl}/api/comment`,
         { body: commentContent },
-        { headers: { Authorization: token }, params: { aid: _id } }
+        {
+          headers: {
+            Authorization: token,
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          },
+          params: { aid: _id },
+        }
       );
     } catch (error) {
       console.log(error);
@@ -74,7 +81,11 @@ const Makale = ({ user = {} }) => {
     try {
       await axios.delete(`${baseUrl}/api/comment`, {
         params: { cId: id, aId: data._id },
-        headers: { Authorization: token },
+        headers: {
+          Authorization: token,
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
       });
     } catch (error) {
       console.log(error);
@@ -94,7 +105,11 @@ const Makale = ({ user = {} }) => {
         `${baseUrl}/api/comment`,
         { body: commentContent },
         {
-          headers: { Authorization: token },
+          headers: {
+            Authorization: token,
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          },
           params: { aid: _id, cId: commentId },
         }
       );

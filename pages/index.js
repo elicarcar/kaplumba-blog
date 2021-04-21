@@ -45,11 +45,15 @@ Home.getInitialProps = async (ctx) => {
     const page = ctx.query.page ? ctx.query.page : '1';
     const size = 5;
     const url = `${baseUrl}/api/articles`;
-    const payload = {
+    const payload = {};
+    const res = await axios.get(url, {
       params: { page, size },
-      headers: { Authorization: token },
-    };
-    const res = await axios.get(url, payload);
+      headers: {
+        Authorization: token,
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+      },
+    });
     return res.data;
   } catch (error) {
     console.log('bok');

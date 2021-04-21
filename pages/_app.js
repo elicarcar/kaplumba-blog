@@ -26,10 +26,13 @@ MyApp.getInitialProps = async ({ ctx, Component }) => {
   }
 
   try {
-    const payload = {
-      headers: { Authorization: token },
-    };
-    const res = await axios.get(`${baseUrl}/api/user`, payload);
+    const res = await axios.get(`${baseUrl}/api/user`, {
+      headers: {
+        Authorization: token,
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+      },
+    });
     const user = await res.data;
     pageProps.user = user;
   } catch (error) {

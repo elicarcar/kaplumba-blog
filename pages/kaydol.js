@@ -66,7 +66,16 @@ const Kaydol = () => {
         setErrorContent('Lutfen bilgilerinizi kontrol edin');
       }
 
-      const token = await axios.post(`${baseUrl}/api/signup`, { ...formData });
+      const token = await axios.post(
+        `${baseUrl}/api/signup`,
+        { ...formData },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          },
+        }
+      );
       setSuccess(true);
       setErrorContent('Yasasin!');
       setLoading(false);
