@@ -10,28 +10,28 @@ import '../styles/nprogress.css';
 import App from 'next/app';
 
 class MyApp extends App {
-  static async getInitialProps({ res, ctx, Component }) {
+  static async getInitialProps({ ctx, Component }) {
     const { token } = await parseCookies(ctx);
 
     let pageProps = {};
 
-    const notProtectedRoute =
-      ctx.pathname == '/kaydol' || ctx.pathname == '/login';
+    // const notProtectedRoute =
+    //   ctx.pathname == '/kaydol' || ctx.pathname == '/login';
 
     if (Component.getInitialProps) {
       pageProps = await Component.getInitialProps(ctx);
     }
 
-    if (!notProtectedRoute && !token) {
-      if (ctx.req) {
-        res.writeHead(301, {
-          Location: 'new/url/destination/here',
-        });
-        res.end();
-      } else {
-        Router.push('/login');
-      }
-    }
+    // if (!notProtectedRoute && !token) {
+    //   if (ctx.req) {
+    //     res.writeHead(301, {
+    //       Location: 'new/url/destination/here',
+    //     });
+    //     res.end();
+    //   } else {
+    //     Router.push('/login');
+    //   }
+    // }
 
     try {
       const payload = {
