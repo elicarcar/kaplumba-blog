@@ -3,17 +3,10 @@ import User from '../../models/User';
 import Article from '../../models/Article';
 import connectDb from '../../utils/db';
 import authMiddleware from '../../utils/auth';
-import NextCors from 'nextjs-cors';
 
 connectDb();
 
 export default function handler(req, res) {
-  NextCors(req, res, {
-    // Options
-    methods: ['GET', 'PUT', 'DELETE'],
-    origin: '*',
-    optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-  });
   if (req.method === 'GET') {
     return handleGetUser(req, res);
   } else if (req.method === 'PUT') {

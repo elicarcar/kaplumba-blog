@@ -1,18 +1,11 @@
 import Article from '../../models/Article';
 import authMiddleware from '../../utils/auth';
 import connectDb from '../../utils/db';
-import NextCors from 'nextjs-cors';
 
 connectDb();
 
 export default async function (req, res) {
   try {
-    await NextCors(req, res, {
-      // Options
-      methods: ['GET'],
-      origin: '*',
-      optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-    });
     await authMiddleware(req, res);
     const { page, size } = req.query;
     const pageNum = Number(page);
