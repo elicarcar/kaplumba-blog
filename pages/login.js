@@ -60,7 +60,14 @@ const Login = ({ user }) => {
 
     try {
       setLoading(true);
-      const token = await axios.post(`${baseUrl}/api/login`, { ...formData });
+      const token = await axios.post(
+        `${baseUrl}/api/login`,
+        { ...formData },
+        {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        }
+      );
       setCookie(token);
 
       router.push('/profilim');

@@ -1,8 +1,12 @@
 module.exports = {
+  env: {
+    MONGO_DB:
+      'mongodb+srv://eli:elideli@cluster0.1b5rb.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+    JWT_SECRET: 'kaplumba_blog',
+  },
   async headers() {
     return [
       {
-        // matching all API routes
         source: '/api/:path*',
         headers: [
           { key: 'Access-Control-Allow-Credentials', value: 'true' },
@@ -20,9 +24,12 @@ module.exports = {
       },
     ];
   },
-  env: {
-    MONGO_DB:
-      'mongodb+srv://eli:elideli@cluster0.1b5rb.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
-    JWT_SECRET: 'kaplumba_blog',
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'https://kaplumba-blog.vercel.app/:path*',
+      },
+    ];
   },
 };

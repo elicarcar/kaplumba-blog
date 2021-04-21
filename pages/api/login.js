@@ -3,8 +3,21 @@ import jwt from 'jsonwebtoken';
 import User from '../../models/User';
 import connectDb from '../../utils/db';
 
+import Cors from 'cors';
+import corsMiddleware from '../../utils/corsMiddleware';
+
+// Initialize the cors middleware
+const cors = corsMiddleware(
+  // You can read more about the available options here: https://github.com/expressjs/cors#configuration-options
+  Cors({
+    // Only allow requests with GET, POST and OPTIONS
+    methods: ['GET', 'POST'],
+  })
+);
+
 connectDb();
 export default async (req, res) => {
+  await cors(req, res);
   try {
     const { email, password } = req.body;
 
