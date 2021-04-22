@@ -8,6 +8,7 @@ import Cors from 'cors';
 connectDb();
 
 const cors = Cors({
+  credentials: true,
   origin: '*',
   methods: ['GET', 'POST', 'OPTIONS'],
   preflightContinue: true,
@@ -19,7 +20,6 @@ function runMiddleware(req, res, fn) {
     fn(req, res, (result) => {
       if (result instanceof Error) {
         return reject(result);
-        console.log(req);
       }
 
       return resolve(result);
@@ -28,8 +28,6 @@ function runMiddleware(req, res, fn) {
 }
 
 export default async (req, res) => {
-  console.log(req);
-
   await runMiddleware(req, res, cors);
 
   try {

@@ -67,9 +67,8 @@ const Login = ({ user }) => {
           headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'POST',
+            'Access-Control-Allow-Methods': ['POST', 'OPTIONS'],
             'Access-Control-Allow-Headers': 'X-PINGOTHER, Content-Type',
-            'Access-Control-Max-Age': 86400,
             Accept: 'application/json',
           },
         }
