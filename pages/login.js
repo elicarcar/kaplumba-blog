@@ -80,6 +80,7 @@ const Login = ({ user }) => {
     } catch (error) {
       setError(true);
       setErrorContent(error.response.data);
+      console.log(error);
     } finally {
       setLoading(false);
       e.target.reset();
