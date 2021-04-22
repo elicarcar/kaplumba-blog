@@ -4,20 +4,34 @@ import User from '../../models/User';
 import connectDb from '../../utils/db';
 
 import Cors from 'cors';
-import corsMiddleware from '../../utils/corsMiddleware';
-
-// Initialize the cors middleware
-const cors = corsMiddleware(
-  // You can read more about the available options here: https://github.com/expressjs/cors#configuration-options
-  Cors({
-    // Only allow requests with GET, POST and OPTIONS
-    methods: ['GET', 'POST'],
-  })
-);
 
 connectDb();
+
+const cors = Cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'OPTIONS'],
+  preflightContinue: true,
+  optionsSuccessStatus: 200,
+});
+
+function runMiddleware(req, res, fn) {
+  return new Promise((resolve, reject) => {
+    fn(req, res, (result) => {
+      if (result instanceof Error) {
+        return reject(result);
+        console.log(req);
+      }
+
+      return resolve(result);
+    });
+  });
+}
+
 export default async (req, res) => {
-  await cors(req, res);
+  console.log(req);
+
+  await runMiddleware(req, res, cors);
+
   try {
     const { email, password } = req.body;
 

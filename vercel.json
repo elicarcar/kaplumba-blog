@@ -15,11 +15,5 @@
         }
       ]
     }
-  ],
-
-  "name": "kaplumba",
-  "version": 2,
-  "env": {
-    "MONGO_DB": "@mongo-db-production-m4ru"
-  }
+  ]
 }

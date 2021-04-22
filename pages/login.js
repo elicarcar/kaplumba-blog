@@ -64,8 +64,13 @@ const Login = ({ user }) => {
         `${baseUrl}/api/login`,
         { ...formData },
         {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'POST',
+            'Access-Control-Allow-Headers': 'X-PINGOTHER, Content-Type',
+            'Access-Control-Max-Age': 86400,
+          },
         }
       );
       setCookie(token);
