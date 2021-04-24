@@ -3,7 +3,6 @@ import { EditorState } from 'draft-js';
 import { convertFromHTML, convertToHTML } from 'draft-convert';
 import { Container, Button, Input, Header, Message } from 'semantic-ui-react';
 import axios from 'axios';
-import baseUrl from '../../utils/baseUrl';
 import { parseCookies } from 'nookies';
 import Cookie from 'js-cookie';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -52,7 +51,7 @@ const Edit = ({ article }) => {
       await exportHTML();
 
       await axios.put(
-        `${baseUrl}/api/article`,
+        `/api/article`,
         {
           header: headerContent,
           content: contentState,
@@ -126,7 +125,7 @@ Edit.getInitialProps = async (ctx) => {
       headers: { Authorization: token },
       params: { _id },
     };
-    const res = await axios.get(`${baseUrl}/api/article`, payload);
+    const res = await axios.get(`/api/article`, payload);
 
     return { article: res.data };
   } catch (error) {}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Icon, Modal, Header, Button } from 'semantic-ui-react';
 import Link from 'next/link';
-import baseUrl from '../utils/baseUrl';
+
 import axios from 'axios';
 import Cookie from 'js-cookie';
 import moment from 'moment';
@@ -44,7 +44,7 @@ const Yazi = ({ article, user, isOnProfilePage = false }) => {
     try {
       setLoading(true);
       const res = await axios.put(
-        `${baseUrl}/api/list`,
+        `/api/list`,
         { articleId: article._id },
         {
           headers: {
@@ -65,7 +65,7 @@ const Yazi = ({ article, user, isOnProfilePage = false }) => {
     const token = await Cookie.get('token');
     try {
       setLoading(true);
-      await axios.delete(`${baseUrl}/api/article`, {
+      await axios.delete(`/api/article`, {
         params: { _id: id },
         headers: { Authorization: token },
       });

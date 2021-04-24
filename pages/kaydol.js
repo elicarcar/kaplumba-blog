@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import baseUrl from '../utils/baseUrl';
 import {
   Form,
   Input,
@@ -67,7 +66,7 @@ const Kaydol = () => {
       }
 
       const token = await axios.post(
-        `${baseUrl}/api/signup`,
+        `/api/signup`,
         { ...formData },
         {
           headers: {

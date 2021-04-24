@@ -9,7 +9,6 @@ import {
   Icon,
   Modal,
 } from 'semantic-ui-react';
-import baseUrl from '../utils/baseUrl';
 import axios from 'axios';
 import useSWR from 'swr';
 import Cookie from 'js-cookie';
@@ -35,7 +34,7 @@ const Makale = ({ user = {} }) => {
     try {
       setLoading(true);
       await axios.post(
-        `${baseUrl}/api/comment`,
+        `/api/comment`,
         { body: commentContent },
         {
           headers: {
@@ -62,7 +61,7 @@ const Makale = ({ user = {} }) => {
       })
       .then((res) => res.data);
 
-  const { data, error } = useSWR(`${baseUrl}/api/article`, fetcher, {
+  const { data, error } = useSWR(`/api/article`, fetcher, {
     refreshInterval: 2000,
   });
 
@@ -79,7 +78,7 @@ const Makale = ({ user = {} }) => {
       return;
     }
     try {
-      await axios.delete(`${baseUrl}/api/comment`, {
+      await axios.delete(`/api/comment`, {
         params: { cId: id, aId: data._id },
         headers: {
           Authorization: token,
@@ -102,7 +101,7 @@ const Makale = ({ user = {} }) => {
     try {
       setLoading(true);
       await axios.put(
-        `${baseUrl}/api/comment`,
+        `/api/comment`,
         { body: commentContent },
         {
           headers: {

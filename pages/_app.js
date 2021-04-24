@@ -3,7 +3,6 @@ import Layout from '../components/Layout';
 import axios from 'axios';
 import Router from 'next/router';
 import { parseCookies, destroyCookie } from 'nookies';
-import baseUrl from '../utils/baseUrl';
 import 'semantic-ui-css/semantic.min.css';
 import { redirectUser } from '../utils/clientAuth';
 import '../styles/nprogress.css';
@@ -26,7 +25,7 @@ MyApp.getInitialProps = async ({ ctx, Component }) => {
   }
 
   try {
-    const res = await axios.get(`${baseUrl}/api/user`, {
+    const res = await axios.get(`/api/user`, {
       headers: {
         Authorization: token,
         'Content-Type': 'application/json',

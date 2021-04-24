@@ -11,7 +11,6 @@ import {
 } from 'semantic-ui-react';
 import Link from 'next/link';
 import axios from 'axios';
-import baseUrl from '../utils/baseUrl';
 import { setCookie } from '../utils/clientAuth';
 
 const Login = ({ user }) => {
@@ -61,7 +60,7 @@ const Login = ({ user }) => {
     try {
       setLoading(true);
       const token = await axios.post(
-        `${baseUrl}/api/login`,
+        `/api/login`,
         { ...formData },
         {
           headers: {

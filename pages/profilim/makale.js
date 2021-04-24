@@ -3,7 +3,6 @@ import { EditorState } from 'draft-js';
 import { convertToHTML } from 'draft-convert';
 import { Container, Button, Input, Header, Message } from 'semantic-ui-react';
 import axios from 'axios';
-import baseUrl from '../../utils/baseUrl';
 import Cookie from 'js-cookie';
 
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -53,7 +52,7 @@ const Makale = () => {
       };
 
       await axios.post(
-        `${baseUrl}/api/article`,
+        `/api/article`,
         {
           ...payload,
         },

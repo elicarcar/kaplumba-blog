@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import Yazi from '../components/Yazi';
 import { Container, Header } from 'semantic-ui-react';
 import { parseCookies } from 'nookies';
-import baseUrl from '../utils/baseUrl';
 import axios from 'axios';
 import Link from 'next/link';
 import ArticlesPagination from '../components/ArticlesPagination';
@@ -44,14 +43,12 @@ Home.getInitialProps = async (ctx) => {
   try {
     const page = ctx.query.page ? ctx.query.page : '1';
     const size = 5;
-    const url = `${baseUrl}/api/articles`;
+    const url = `/api/articles`;
     const payload = {};
     const res = await axios.get(url, {
       params: { page, size },
       headers: {
         Authorization: token,
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
       },
     });
     return res.data;
