@@ -11,8 +11,6 @@ module.exports = {
         headers: [
           { key: 'Access-Control-Allow-Credentials', value: 'true' },
           { key: 'Access-Control-Allow-Origin', value: '*' },
-          { key: 'Origin', value: 'https://kaplumba-blog.vercel.app' },
-          { key: 'Referer', value: 'https://kaplumba-blog.vercel.app' },
           {
             key: 'Access-Control-Allow-Methods',
             value: 'GET,OPTIONS,PATCH,DELETE,POST,PUT',
